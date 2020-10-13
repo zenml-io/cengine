@@ -1,16 +1,37 @@
-# cengine
-This is the maiot Core Engine. Published pip package can be found [here](https://pypi.org/project/cengine).
+
+<h1>
+  <a href="https://maiot.io">
+    <img src=https://maiot.io/assets/images/maiot.png alt="maiot Core Engine" width=55>
+  </a>
+  &nbsp;maiot Core Engine&nbsp;
+  <a href="https://docs.maiot.io"><img alt="release" src=https://img.shields.io/badge/-docs-26CB7C></a>
+  <a href="https://github.com/maiot-io/cengine/releases"><img alt="release" src=https://img.shields.io/github/release/maiot-io/cengine?colorB=431d93></a>
+</h1>
+
+<video width="320" height="240" controls>
+  <source src="https://maiot.io/assets/cengine-1x.mp4" type="video/mp4">
+</video>
+
+#### Automate ML with repeatable pipelines
+
+
+Hello there! This is the repository for the  maiot Core Engine. If you would like to see the published 
+pip package can be found [here](https://pypi.org/project/cengine).
 
 The Core Engine is a platform that lets you create machine learning pipelines for production use-cases.
-The [maiot website](https://maiot.io) gives an overview of the features of the Core Engine.
-For more information on how to use the Core Engine, please refer to the [docs](https://docs.maiot.io).
+Our [website](https://maiot.io) gives an overview of the features of the Core Engine and if you find 
+it interesting, you can sign up for an early access [here](https://maiot.io/#early-access). You can also learn 
+more about how to use the Core Engine [here](https://docs.maiot.io).
 
 ## How to install from pip
+
+You can easily install `cengine` using pip:
 ```bash
 pip install cengine
 ```
 
 ## How to install from source
+On the other hand, if you like to install from the source directly, you can follow:
 ```bash
 make venv
 source venv/bin/activate
