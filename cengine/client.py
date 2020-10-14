@@ -74,9 +74,9 @@ class Client:
         return [Provider(**p.to_dict()) for p in p_list]
 
     def create_provider(self,
-                         name,
-                         provider_type: Text,
-                         args: Dict) -> Provider:
+                        name: Text,
+                        provider_type: Text,
+                        args: Dict) -> Provider:
         """ Create a new provider in db
         """
         api = ce_api.ProvidersApi(self.client)
@@ -142,6 +142,7 @@ class Client:
                           name: Text,
                           type: Text,
                           source: Text,
+                          provider_id: Text,
                           args: Dict[Text, Any]) -> Datasource:
         """ Create a new workspace in DB
         """
@@ -151,6 +152,7 @@ class Client:
             body=Datasource.creator(name=name,
                                     type_=type,
                                     source=source,
+                                    provider_id=provider_id,
                                     args=args))
         return Datasource(**ds.to_dict())
 
@@ -526,8 +528,7 @@ class Client:
             api.get_pipeline_logs_api_v1_pipelines_pipeline_id_runs_pipeline_run_id_logs_get,
             pipeline_id, pipeline_run_id)
 
-        from IPython.core.display import display, HTML
-        return display(HTML(f"""<a href="{logs_url}>{logs_url}</a>"""))
+        return logs_url
 
     # FUNCTIONS ###############################################################
 

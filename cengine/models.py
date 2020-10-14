@@ -53,11 +53,13 @@ class Datasource(datasource.Datasource):
                 name: Text,
                 source: Text,
                 type_: Text,
+                provider_id: Text,
                 args: Dict[Text, Any]):
         return datasource_create.DatasourceCreate(
             name=name,
             source=source,
             type=type_,
+            provider_id=provider_id,
             args=args)
 
     def __str__(self):

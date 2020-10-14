@@ -32,101 +32,6 @@ class BillingApi(object):
             api_client = ApiClient()
         self.api_client = api_client
 
-    def add_payment_method_api_v1_billing_stripe_update_payment_method_put(self, payment_method_id, **kwargs):  # noqa: E501
-        """Add Payment Method  # noqa: E501
-
-        Update payment method of user.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.add_payment_method_api_v1_billing_stripe_update_payment_method_put(payment_method_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param str payment_method_id: (required)
-        :return: object
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-        kwargs['_return_http_data_only'] = True
-        if kwargs.get('async_req'):
-            return self.add_payment_method_api_v1_billing_stripe_update_payment_method_put_with_http_info(payment_method_id, **kwargs)  # noqa: E501
-        else:
-            (data) = self.add_payment_method_api_v1_billing_stripe_update_payment_method_put_with_http_info(payment_method_id, **kwargs)  # noqa: E501
-            return data
-
-    def add_payment_method_api_v1_billing_stripe_update_payment_method_put_with_http_info(self, payment_method_id, **kwargs):  # noqa: E501
-        """Add Payment Method  # noqa: E501
-
-        Update payment method of user.  # noqa: E501
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.add_payment_method_api_v1_billing_stripe_update_payment_method_put_with_http_info(payment_method_id, async_req=True)
-        >>> result = thread.get()
-
-        :param async_req bool
-        :param str payment_method_id: (required)
-        :return: object
-                 If the method is called asynchronously,
-                 returns the request thread.
-        """
-
-        all_params = ['payment_method_id']  # noqa: E501
-        all_params.append('async_req')
-        all_params.append('_return_http_data_only')
-        all_params.append('_preload_content')
-        all_params.append('_request_timeout')
-
-        params = locals()
-        for key, val in six.iteritems(params['kwargs']):
-            if key not in all_params:
-                raise TypeError(
-                    "Got an unexpected keyword argument '%s'"
-                    " to method add_payment_method_api_v1_billing_stripe_update_payment_method_put" % key
-                )
-            params[key] = val
-        del params['kwargs']
-        # verify the required parameter 'payment_method_id' is set
-        if ('payment_method_id' not in params or
-                params['payment_method_id'] is None):
-            raise ValueError("Missing the required parameter `payment_method_id` when calling `add_payment_method_api_v1_billing_stripe_update_payment_method_put`")  # noqa: E501
-
-        collection_formats = {}
-
-        path_params = {}
-
-        query_params = []
-        if 'payment_method_id' in params:
-            query_params.append(('payment_method_id', params['payment_method_id']))  # noqa: E501
-
-        header_params = {}
-
-        form_params = []
-        local_var_files = {}
-
-        body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
-
-        # Authentication setting
-        auth_settings = ['OAuth2PasswordBearer']  # noqa: E501
-
-        return self.api_client.call_api(
-            '/api/v1/billing/stripe/update-payment-method', 'PUT',
-            path_params,
-            query_params,
-            header_params,
-            body=body_params,
-            post_params=form_params,
-            files=local_var_files,
-            response_type='object',  # noqa: E501
-            auth_settings=auth_settings,
-            async_req=params.get('async_req'),
-            _return_http_data_only=params.get('_return_http_data_only'),
-            _preload_content=params.get('_preload_content', True),
-            _request_timeout=params.get('_request_timeout'),
-            collection_formats=collection_formats)
-
     def create_stripe_session_api_v1_billing_stripe_session_get(self, **kwargs):  # noqa: E501
         """Create Stripe Session  # noqa: E501
 
@@ -381,6 +286,93 @@ class BillingApi(object):
             post_params=form_params,
             files=local_var_files,
             response_type='Billing',  # noqa: E501
+            auth_settings=auth_settings,
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
+
+    def get_organization_invoices_api_v1_billing_organization_invoices_get(self, **kwargs):  # noqa: E501
+        """Get Organization Invoices  # noqa: E501
+
+        Returns the invoices  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.get_organization_invoices_api_v1_billing_organization_invoices_get(async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool
+        :return: list[object]
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.get_organization_invoices_api_v1_billing_organization_invoices_get_with_http_info(**kwargs)  # noqa: E501
+        else:
+            (data) = self.get_organization_invoices_api_v1_billing_organization_invoices_get_with_http_info(**kwargs)  # noqa: E501
+            return data
+
+    def get_organization_invoices_api_v1_billing_organization_invoices_get_with_http_info(self, **kwargs):  # noqa: E501
+        """Get Organization Invoices  # noqa: E501
+
+        Returns the invoices  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.get_organization_invoices_api_v1_billing_organization_invoices_get_with_http_info(async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool
+        :return: list[object]
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+
+        all_params = []  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
+
+        params = locals()
+        for key, val in six.iteritems(params['kwargs']):
+            if key not in all_params:
+                raise TypeError(
+                    "Got an unexpected keyword argument '%s'"
+                    " to method get_organization_invoices_api_v1_billing_organization_invoices_get" % key
+                )
+            params[key] = val
+        del params['kwargs']
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = []
+        local_var_files = {}
+
+        body_params = None
+        # HTTP header `Accept`
+        header_params['Accept'] = self.api_client.select_header_accept(
+            ['application/json'])  # noqa: E501
+
+        # Authentication setting
+        auth_settings = ['OAuth2PasswordBearer']  # noqa: E501
+
+        return self.api_client.call_api(
+            '/api/v1/billing/organization/invoices', 'GET',
+            path_params,
+            query_params,
+            header_params,
+            body=body_params,
+            post_params=form_params,
+            files=local_var_files,
+            response_type='list[object]',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),
@@ -1131,6 +1123,101 @@ class BillingApi(object):
             post_params=form_params,
             files=local_var_files,
             response_type='str',  # noqa: E501
+            auth_settings=auth_settings,
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
+
+    def update_payment_method_api_v1_billing_stripe_update_payment_method_put(self, payment_method_id, **kwargs):  # noqa: E501
+        """Update Payment Method  # noqa: E501
+
+        Update payment method of user.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.update_payment_method_api_v1_billing_stripe_update_payment_method_put(payment_method_id, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool
+        :param str payment_method_id: (required)
+        :return: object
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.update_payment_method_api_v1_billing_stripe_update_payment_method_put_with_http_info(payment_method_id, **kwargs)  # noqa: E501
+        else:
+            (data) = self.update_payment_method_api_v1_billing_stripe_update_payment_method_put_with_http_info(payment_method_id, **kwargs)  # noqa: E501
+            return data
+
+    def update_payment_method_api_v1_billing_stripe_update_payment_method_put_with_http_info(self, payment_method_id, **kwargs):  # noqa: E501
+        """Update Payment Method  # noqa: E501
+
+        Update payment method of user.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.update_payment_method_api_v1_billing_stripe_update_payment_method_put_with_http_info(payment_method_id, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool
+        :param str payment_method_id: (required)
+        :return: object
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+
+        all_params = ['payment_method_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
+
+        params = locals()
+        for key, val in six.iteritems(params['kwargs']):
+            if key not in all_params:
+                raise TypeError(
+                    "Got an unexpected keyword argument '%s'"
+                    " to method update_payment_method_api_v1_billing_stripe_update_payment_method_put" % key
+                )
+            params[key] = val
+        del params['kwargs']
+        # verify the required parameter 'payment_method_id' is set
+        if ('payment_method_id' not in params or
+                params['payment_method_id'] is None):
+            raise ValueError("Missing the required parameter `payment_method_id` when calling `update_payment_method_api_v1_billing_stripe_update_payment_method_put`")  # noqa: E501
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'payment_method_id' in params:
+            query_params.append(('payment_method_id', params['payment_method_id']))  # noqa: E501
+
+        header_params = {}
+
+        form_params = []
+        local_var_files = {}
+
+        body_params = None
+        # HTTP header `Accept`
+        header_params['Accept'] = self.api_client.select_header_accept(
+            ['application/json'])  # noqa: E501
+
+        # Authentication setting
+        auth_settings = ['OAuth2PasswordBearer']  # noqa: E501
+
+        return self.api_client.call_api(
+            '/api/v1/billing/stripe/update-payment-method', 'PUT',
+            path_params,
+            query_params,
+            header_params,
+            body=body_params,
+            post_params=form_params,
+            files=local_var_files,
+            response_type='object',  # noqa: E501
             auth_settings=auth_settings,
             async_req=params.get('async_req'),
             _return_http_data_only=params.get('_return_http_data_only'),

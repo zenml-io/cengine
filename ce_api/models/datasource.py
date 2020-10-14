@@ -32,6 +32,7 @@ class Datasource(object):
         'args': 'object',
         'type': 'str',
         'source': 'str',
+        'provider_id': 'str',
         'id': 'str',
         'created_at': 'datetime',
         'organization_id': 'str',
@@ -45,6 +46,7 @@ class Datasource(object):
         'args': 'args',
         'type': 'type',
         'source': 'source',
+        'provider_id': 'provider_id',
         'id': 'id',
         'created_at': 'created_at',
         'organization_id': 'organization_id',
@@ -53,12 +55,13 @@ class Datasource(object):
         'datasource_commits': 'datasource_commits'
     }
 
-    def __init__(self, name=None, args=None, type=None, source=None, id=None, created_at=None, organization_id=None, origin_pipeline_id=None, metadatastore_id=None, datasource_commits=None):  # noqa: E501
+    def __init__(self, name=None, args=None, type=None, source=None, provider_id=None, id=None, created_at=None, organization_id=None, origin_pipeline_id=None, metadatastore_id=None, datasource_commits=None):  # noqa: E501
         """Datasource - a model defined in Swagger"""  # noqa: E501
         self._name = None
         self._args = None
         self._type = None
         self._source = None
+        self._provider_id = None
         self._id = None
         self._created_at = None
         self._organization_id = None
@@ -74,6 +77,8 @@ class Datasource(object):
             self.type = type
         if source is not None:
             self.source = source
+        if provider_id is not None:
+            self.provider_id = provider_id
         if id is not None:
             self.id = id
         if created_at is not None:
@@ -170,6 +175,27 @@ class Datasource(object):
         """
 
         self._source = source
+
+    @property
+    def provider_id(self):
+        """Gets the provider_id of this Datasource.  # noqa: E501
+
+
+        :return: The provider_id of this Datasource.  # noqa: E501
+        :rtype: str
+        """
+        return self._provider_id
+
+    @provider_id.setter
+    def provider_id(self, provider_id):
+        """Sets the provider_id of this Datasource.
+
+
+        :param provider_id: The provider_id of this Datasource.  # noqa: E501
+        :type: str
+        """
+
+        self._provider_id = provider_id
 
     @property
     def id(self):

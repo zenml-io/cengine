@@ -25,12 +25,14 @@ def datasource(info):
 @click.argument("name", type=str)
 @click.argument("ds_type", type=str)
 @click.argument("source", type=str)
+@click.argument("provider_id", type=str)
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
 @pass_info
 def create_datasource(info,
                       name,
                       ds_type,
                       source,
+                      provider_id,
                       args):
     """Create a datasource"""
     click.echo('Registering datasource {}...'.format(name))
@@ -38,12 +40,18 @@ def create_datasource(info,
     parsed_args = parse_unknown_options(args)
 
     api = ce_api.DatasourcesApi(api_client(info))
+    p_api = ce_api.ProvidersApi(api_client(info))
+
+    p_list = api_call(p_api.get_loggedin_provider_api_v1_providers_get)
+    p_uuid = find_closest_uuid(provider_id, p_list)
+
     ds = api_call(
         api.create_datasource_api_v1_datasources_post,
         DatasourceCreate(
             name=name,
             type=ds_type,
             source=source,
+            provider_id=p_uuid,
             args=parsed_args,
         ))
 

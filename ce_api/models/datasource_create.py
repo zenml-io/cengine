@@ -31,22 +31,25 @@ class DatasourceCreate(object):
         'name': 'str',
         'args': 'object',
         'type': 'str',
-        'source': 'str'
+        'source': 'str',
+        'provider_id': 'str'
     }
 
     attribute_map = {
         'name': 'name',
         'args': 'args',
         'type': 'type',
-        'source': 'source'
+        'source': 'source',
+        'provider_id': 'provider_id'
     }
 
-    def __init__(self, name=None, args=None, type=None, source=None):  # noqa: E501
+    def __init__(self, name=None, args=None, type=None, source=None, provider_id=None):  # noqa: E501
         """DatasourceCreate - a model defined in Swagger"""  # noqa: E501
         self._name = None
         self._args = None
         self._type = None
         self._source = None
+        self._provider_id = None
         self.discriminator = None
         if name is not None:
             self.name = name
@@ -56,6 +59,8 @@ class DatasourceCreate(object):
             self.type = type
         if source is not None:
             self.source = source
+        if provider_id is not None:
+            self.provider_id = provider_id
 
     @property
     def name(self):
@@ -140,6 +145,27 @@ class DatasourceCreate(object):
         """
 
         self._source = source
+
+    @property
+    def provider_id(self):
+        """Gets the provider_id of this DatasourceCreate.  # noqa: E501
+
+
+        :return: The provider_id of this DatasourceCreate.  # noqa: E501
+        :rtype: str
+        """
+        return self._provider_id
+
+    @provider_id.setter
+    def provider_id(self, provider_id):
+        """Sets the provider_id of this DatasourceCreate.
+
+
+        :param provider_id: The provider_id of this DatasourceCreate.  # noqa: E501
+        :type: str
+        """
+
+        self._provider_id = provider_id
 
     def to_dict(self):
         """Returns the model properties as a dict"""

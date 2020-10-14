@@ -183,16 +183,16 @@ class PipelineConfig:
     @evaluator.setter
     def evaluator(self, evaluator):
         if isinstance(evaluator, list):
-            self.__evaluator = Features(*evaluator)
+            self.__evaluator = Evaluator(*evaluator)
         elif isinstance(evaluator, dict):
-            self.__evaluator = Features(**evaluator)
-        elif isinstance(evaluator, Features):
+            self.__evaluator = Evaluator(**evaluator)
+        elif isinstance(evaluator, Evaluator):
             self.__evaluator = evaluator
         else:
             raise TypeError(
-                'Please provide either a cengine.Features object '
+                'Please provide either a cengine.Evaluator object '
                 'or a dict instead of a {} to configure the '
-                'preprocessing process.'.format(type(evaluator)))
+                'evaluation process.'.format(type(evaluator)))
 
     @trainer.setter
     def trainer(self, trainer):
@@ -248,7 +248,7 @@ class PipelineConfig:
 
     @evaluator.deleter
     def evaluator(self):
-        self.__evaluator = Features()
+        self.__evaluator = Evaluator()
 
     @trainer.deleter
     def trainer(self):
