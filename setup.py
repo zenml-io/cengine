@@ -74,7 +74,7 @@ setup(
     cengine=ce_cli.cli:cli
     """,
     python_requires=">=3.5.*",
-    license='Proprietary',  # noqa
+    license='Apache License 2.0',  # noqa
     author='maiot GmbH',
     author_email='support@maiot.io',
     url='https://docs.maiot.io/',
@@ -95,7 +95,7 @@ setup(
 
         # Pick your license.  (It should match "license" above.)
 
-        '''License :: Apache License 2.0''',  # noqa
+        'License :: OSI Approved :: Apache Software License',  # noqa
         # noqa
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
