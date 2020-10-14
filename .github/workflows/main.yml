@@ -31,6 +31,6 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
         run: |
-          sed -i 's%r%'"$(echo ${GITHUB_REF} | sed 's|refs/tags/||g')"'%g' ce_standards/version.py
+          sed -i 's%__CE_VERSION__%'"$(echo ${GITHUB_REF} | sed 's|refs/tags/||g')"'%g' ce_standards/version.py
           cat ce_standards/version.py
           # make publish
