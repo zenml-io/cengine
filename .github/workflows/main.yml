@@ -25,8 +25,12 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y make && pip install twine
 
       # Runs a set of commands using the runners shell
-      - name: build
+      - name: publish
+        env: # Or as an environment variable
+          TWINE_NON_INTERACTIVE: ${{ secrets.TWINE_NON_INTERACTIVE }}
+          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
         run: |
           sed -i 's/__CE_VERSION__/'"${CI_COMMIT_TAG}"'/g' ce_standards/version.py
           cat ce_standards/version.py
-          make
+          make publish
