@@ -33,4 +33,4 @@ jobs:
         run: |
           sed -i 's%__CE_VERSION__%'"$(echo ${GITHUB_REF} | sed 's|refs/tags/||g')"'%g' ce_standards/version.py
           cat ce_standards/version.py
-          # make publish
+          make publish
