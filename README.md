@@ -1,4 +1,3 @@
-
 <h1>
   <a href="https://maiot.io">
     <img src=https://maiot.io/assets/images/maiot.png alt="maiot Core Engine" width=55>
@@ -8,12 +7,9 @@
   <a href="https://github.com/maiot-io/cengine/releases"><img alt="release" src=https://img.shields.io/github/release/maiot-io/cengine?colorB=431d93></a>
 </h1>
 
-<video width="320" height="240" controls>
-  <source src="https://maiot.io/assets/cengine-1x.mp4" type="video/mp4">
-</video>
-
 #### Automate ML with repeatable pipelines
 
+<img src=https://gblobscdn.gitbook.com/assets%2F-MCl0MaN3pJfPa2vq2Rb%2F-MJSVuyKMUm7L-4iDzD1%2F-MJSVynHi27dMZrQHXwE%2Farchitectural-overview.png alt="maiot Core Engine">
 
 Hello there! This is the repository for the  maiot Core Engine. If you would like to see the published 
 pip package can be found [here](https://pypi.org/project/cengine).
