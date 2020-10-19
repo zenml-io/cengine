@@ -1,5 +1,4 @@
 API_HOST = 'https://api.ce.maiot.io'
-# API_HOST = 'https://api.ce.maiot.io'
 
 APP_NAME = 'cengine'
 CONFIG_VERSION = '1'

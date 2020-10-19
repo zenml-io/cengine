@@ -4,7 +4,7 @@
   </a>
   &nbsp;maiot Core Engine&nbsp;
   <a href="https://docs.maiot.io"><img alt="release" src=https://img.shields.io/badge/-docs-26CB7C></a>
-  <a href="https://github.com/maiot-io/cengine/releases"><img alt="release" src=https://img.shields.io/github/release/maiot-io/cengine?colorB=431d93></a>
+  <a href="https://github.com/maiot-io/cengine/releases"><img alt="release" src=https://img.shields.io/github/v/tag/maiot-io/cengine?color=431d93></a>
 </h1>
 
 #### Automate ML with repeatable pipelines
