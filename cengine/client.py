@@ -139,6 +139,24 @@ class Client:
         """
         return self.get_backends(id=id)[0]
 
+    def create_backend(self,
+                       name: Text,
+                       provider_id: Text,
+                       backend_class: Text,
+                       backend_type: Text,
+                       args: Dict[Text, Any]) -> Backend:
+        """ Create a new backend
+        """
+        api = ce_api.BackendsApi(self.client)
+        b = api_utils.api_call(
+            func=api.create_backend_api_v1_backends_post,
+            body=Backend.creator(name=name,
+                                 provider_id=provider_id,
+                                 backend_class=backend_class,
+                                 backend_type=backend_type,
+                                 args=args))
+        return Backend(**b.to_dict())
+
     # WORKSPACES ##############################################################
 
     def get_workspaces(self,
@@ -961,12 +979,12 @@ class Client:
         logging.info('Model downloaded to: {}'.format(output_path))
 
 
-# class CLIClient(Client):
-#
-#     def __init__(self, info):
-#         active_user = info[constants.ACTIVE_USER]
-#         config = ce_api.Configuration()
-#         config.host = constants.API_HOST
-#         config.access_token = info[active_user][constants.TOKEN]
-#
-#         self.client = ce_api.ApiClient(config)
+class CLIClient(Client):
+
+    def __init__(self, info):
+        active_user = info[constants.ACTIVE_USER]
+        config = ce_api.Configuration()
+        config.host = constants.API_HOST
+        config.access_token = info[active_user][constants.TOKEN]
+
+        self.client = ce_api.ApiClient(config)

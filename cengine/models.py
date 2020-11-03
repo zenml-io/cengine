@@ -1,6 +1,6 @@
 from typing import Dict, Any, Text
 
-from ce_api.models import backend
+from ce_api.models import backend, backend_create
 from ce_api.models import datasource, datasource_create
 from ce_api.models import datasource_commit, datasource_commit_create
 from ce_api.models import function, function_create
@@ -40,6 +40,19 @@ class Provider(provider.Provider):
 
 
 class Backend(backend.Backend):
+    @classmethod
+    def creator(cls,
+                name,
+                provider_id,
+                backend_class,
+                backend_type,
+                args):
+        return backend_create.BackendCreate(name=name,
+                                            provider_id=provider_id,
+                                            backend_class=backend_class,
+                                            type=backend_type,
+                                            args=args)
+
     def __str__(self):
         return to_pretty_string(self.to_dict())
 
