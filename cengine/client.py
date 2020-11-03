@@ -264,7 +264,8 @@ class Client:
                                     commit_id: Text) -> DatasourceCommit:
         """ Get a workspace with a specific id
         """
-        return self.get_datasource_commits(id=id)[0]
+        return self.get_datasource_commits(datasource_id=datasource_id,
+                                           id=commit_id)[0]
 
     def commit_datasource(self,
                           datasource_id: Text,
