@@ -82,7 +82,7 @@ def set_provider(info, provider_id):
 
     api = ce_api.ProvidersApi(api_client(info))
     p_list = api_call(api.get_loggedin_provider_api_v1_providers_get)
-    p_id = find_closest_uuid(p_list, provider_id)
+    p_id = find_closest_uuid(provider_id, p_list)
 
     info[user][constants.ACTIVE_PROVIDER] = p_id
     info.save()
