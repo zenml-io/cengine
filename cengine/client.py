@@ -26,7 +26,7 @@ from cengine.models import Workspace
 from cengine.models import Provider
 from cengine.models import Backend
 from cengine.pipeline_config import PipelineConfig
-from cengine.utils import api_utils, print_utils
+from cengine.utils import api_utils, print_utils, client_utils
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -35,6 +35,7 @@ logger.setLevel(logging.DEBUG)
 class Client:
 
     # AUTH ####################################################################
+
     def __init__(self,
                  username: Text,
                  password: Text = None):
@@ -65,13 +66,30 @@ class Client:
 
     # PROVIDERS ###############################################################
 
-    def get_providers(self) -> List[Provider]:
+    def get_providers(self,
+                      **kwargs) -> List[Provider]:
         """ Get a list of registered providers
         """
         api = ce_api.ProvidersApi(self.client)
         p_list = api_utils.api_call(
             func=api.get_loggedin_provider_api_v1_providers_get)
-        return [Provider(**p.to_dict()) for p in p_list]
+        providers = [Provider(**p.to_dict()) for p in p_list]
+
+        if kwargs:
+            providers = client_utils.filter_objects(providers, **kwargs)
+        return providers
+
+    def get_provider_by_id(self,
+                           id: Text) -> Provider:
+        """ Get a provider with a specific id
+        """
+        return self.get_providers(id=id)[0]
+
+    def get_provider_by_name(self,
+                             name: Text) -> Provider:
+        """ Get a provider with a specific name
+        """
+        return self.get_providers(name=name)[0]
 
     def create_provider(self,
                         name: Text,
@@ -95,27 +113,77 @@ class Client:
 
     # BACKENDS ################################################################
 
-    def get_backends(self, backend_class=None) -> List[Backend]:
+    def get_backends(self,
+                     **kwargs) -> List[Backend]:
         """ Get a list of registered backends (based on a backend_class)
         """
         api = ce_api.BackendsApi(self.client)
         b_list = api_utils.api_call(
             func=api.get_loggedin_backend_api_v1_backends_get)
 
-        if backend_class:
-            b_list = [b for b in b_list if b.backend_class == backend_class]
+        backends = [Backend(**b.to_dict()) for b in b_list]
 
-        return [Backend(**b.to_dict()) for b in b_list]
+        if kwargs:
+            backends = client_utils.filter_objects(backends, **kwargs)
+        return backends
+
+    def get_backend_by_name(self,
+                            name: Text) -> Backend:
+        """ Get a backend with a specific name
+        """
+        return self.get_backends(name=name)[0]
+
+    def get_backend_by_id(self,
+                          id: Text) -> Backend:
+        """ Get a backend with a specific id
+        """
+        return self.get_backends(id=id)[0]
+
+    def create_backend(self,
+                       name: Text,
+                       provider_id: Text,
+                       backend_class: Text,
+                       backend_type: Text,
+                       args: Dict[Text, Any]) -> Backend:
+        """ Create a new backend
+        """
+        api = ce_api.BackendsApi(self.client)
+        b = api_utils.api_call(
+            func=api.create_backend_api_v1_backends_post,
+            body=Backend.creator(name=name,
+                                 provider_id=provider_id,
+                                 backend_class=backend_class,
+                                 backend_type=backend_type,
+                                 args=args))
+        return Backend(**b.to_dict())
 
     # WORKSPACES ##############################################################
 
-    def get_workspaces(self) -> List[Workspace]:
+    def get_workspaces(self,
+                       **kwargs) -> List[Workspace]:
         """ Get a list of workspaces
         """
+
         api = ce_api.WorkspacesApi(self.client)
         ws_list = api_utils.api_call(
             func=api.get_loggedin_workspaces_api_v1_workspaces_get)
-        return [Workspace(**ws.to_dict()) for ws in ws_list]
+
+        workspaces = [Workspace(**ws.to_dict()) for ws in ws_list]
+        if kwargs:
+            workspaces = client_utils.filter_objects(workspaces, **kwargs)
+        return workspaces
+
+    def get_workspace_by_name(self,
+                              name: Text) -> Workspace:
+        """ Get a workspace with a specific name
+        """
+        return self.get_workspaces(name=name)[0]
+
+    def get_workspace_by_id(self,
+                            id: Text) -> Workspace:
+        """ Get a workspace with a specific id
+        """
+        return self.get_workspaces(id=id)[0]
 
     def create_workspace(self,
                          name: Text,
@@ -130,13 +198,30 @@ class Client:
 
     # DATASOURCES #############################################################
 
-    def get_datasources(self) -> List[Datasource]:
+    def get_datasources(self,
+                        **kwargs) -> List[Datasource]:
         """ Get a list of datasources
         """
         api = ce_api.DatasourcesApi(self.client)
         ds_list = api_utils.api_call(
             func=api.get_datasources_api_v1_datasources_get)
-        return [Datasource(**ds.to_dict()) for ds in ds_list]
+        datasources = [Datasource(**ds.to_dict()) for ds in ds_list]
+
+        if kwargs:
+            datasources = client_utils.filter_objects(datasources, **kwargs)
+        return datasources
+
+    def get_datasource_by_name(self,
+                               name: Text) -> Datasource:
+        """ Get a workspace with a specific name
+        """
+        return self.get_datasources(name=name)[0]
+
+    def get_datasource_by_id(self,
+                             id: Text) -> Datasource:
+        """ Get a workspace with a specific id
+        """
+        return self.get_datasources(id=id)[0]
 
     def create_datasource(self,
                           name: Text,
@@ -159,8 +244,8 @@ class Client:
     # DATASOURCE COMMITS ######################################################
 
     def get_datasource_commits(self,
-                               datasource_id: Text
-                               ) -> List[DatasourceCommit]:
+                               datasource_id: Text,
+                               **kwargs) -> List[DatasourceCommit]:
 
         api = ce_api.DatasourcesApi(self.client)
 
@@ -168,7 +253,19 @@ class Client:
             api.get_commits_api_v1_datasources_ds_id_commits_get,
             datasource_id)
 
-        return [DatasourceCommit(**dsc.to_dict()) for dsc in dsc_list]
+        commits = [DatasourceCommit(**dsc.to_dict()) for dsc in dsc_list]
+
+        if kwargs:
+            commits = client_utils.filter_objects(commits, **kwargs)
+        return commits
+
+    def get_datasource_commit_by_id(self,
+                                    datasource_id: Text,
+                                    commit_id: Text) -> DatasourceCommit:
+        """ Get a workspace with a specific id
+        """
+        return self.get_datasource_commits(datasource_id=datasource_id,
+                                           id=commit_id)[0]
 
     def commit_datasource(self,
                           datasource_id: Text,
@@ -216,14 +313,35 @@ class Client:
     # PIPELINES ###############################################################
 
     def get_pipelines(self,
-                      workspace_id: Text) -> List[Pipeline]:
+                      workspace_id: Text,
+                      **kwargs) -> List[Pipeline]:
 
         api = ce_api.WorkspacesApi(self.client)
         all_ps = api_utils.api_call(
             api.get_workspaces_pipelines_api_v1_workspaces_workspace_id_pipelines_get,
             workspace_id)
 
-        return [Pipeline(**p.to_dict()) for p in all_ps]
+        pipelines = [Pipeline(**p.to_dict()) for p in all_ps]
+
+        if kwargs:
+            pipelines = client_utils.filter_objects(pipelines, **kwargs)
+        return pipelines
+
+    def get_pipeline_by_name(self,
+                             workspace_id: Text,
+                             name: Text) -> Pipeline:
+        """ Get a pipeline with a specific name
+        """
+        return self.get_pipelines(workspace_id=workspace_id,
+                                  name=name)[0]
+
+    def get_pipeline_by_id(self,
+                           workspace_id: Text,
+                           id: Text) -> Pipeline:
+        """ Get a pipeline with a specific id
+        """
+        return self.get_pipelines(workspace_id=workspace_id,
+                                  id=id)[0]
 
     def push_pipeline(self,
                       name: Text,
@@ -498,14 +616,27 @@ class Client:
     # PIPELINE RUN ############################################################
 
     def get_pipeline_runs(self,
-                          pipeline_id) -> List[PipelineRun]:
+                          pipeline_id: Text,
+                          **kwargs) -> List[PipelineRun]:
 
         api = ce_api.PipelinesApi(self.client)
         pr_list = api_utils.api_call(
             api.get_pipeline_runs_api_v1_pipelines_pipeline_id_runs_get,
             pipeline_id)
 
-        return [PipelineRun(**pr.to_dict()) for pr in pr_list]
+        runs = [PipelineRun(**pr.to_dict()) for pr in pr_list]
+
+        if kwargs:
+            runs = client_utils.filter_objects(runs, **kwargs)
+        return runs
+
+    def get_pipeline_run_by_id(self,
+                               pipeline_id: Text,
+                               id: Text) -> PipelineRun:
+        """ Get a pipeline with a specific id
+        """
+        return self.get_pipeline_runs(pipeline_id=pipeline_id,
+                                      id=id)[0]
 
     def get_pipeline_run(self,
                          pipeline_id,
@@ -532,52 +663,106 @@ class Client:
 
     # FUNCTIONS ###############################################################
 
-    def get_functions(self):
+    def get_functions(self,
+                      **kwargs):
         api = ce_api.FunctionsApi(self.client)
         f_list = api_utils.api_call(api.get_functions_api_v1_functions_get)
-        return [Function(**f.to_dict()) for f in f_list]
+        functions = [Function(**f.to_dict()) for f in f_list]
 
-    def get_function_versions(self, function_id):
+        if kwargs:
+            functions = client_utils.filter_objects(functions, **kwargs)
+        return functions
+
+    def get_function_by_name(self,
+                             name: Text) -> Function:
+        """ Get a function with a specific name
+        """
+        return self.get_functions(name=name)[0]
+
+    def get_function_by_id(self,
+                           id: Text) -> Function:
+        """ Get a function with a specific id
+        """
+        return self.get_functions(id=id)[0]
+
+    # FUNCTION VERSIONS #######################################################
+
+    def get_function_versions(self,
+                              function_id: Text,
+                              **kwargs) -> List[FunctionVersion]:
         api = ce_api.FunctionsApi(self.client)
         fv_list = api_utils.api_call(
             api.get_function_versions_api_v1_functions_function_id_versions_get,
             function_id)
-        return [FunctionVersion(**fv.to_dict()) for fv in fv_list]
+        versions = [FunctionVersion(**fv.to_dict()) for fv in fv_list]
 
-    def get_function_version(self, function_id, version_id):
-        api = ce_api.FunctionsApi(self.client)
+        if kwargs:
+            versions = client_utils.filter_objects(versions, **kwargs)
+        return versions
 
-        function_version = api_utils.api_call(
-            api.get_function_version_api_v1_functions_function_id_versions_version_id_get,
-            function_id,
-            version_id)
-
-        return function_version
+    def get_function_version_by_id(self,
+                                   function_id: Text,
+                                   version_id: Text) -> FunctionVersion:
+        return self.get_function_versions(function_id=function_id,
+                                          id=version_id)[0]
 
     def push_function(self,
                       name: Text,
                       function_type: Text,
                       local_path: Text,
                       udf_name: Text,
-                      message: Text = None):
+                      message: Text = None) -> FunctionVersion:
 
         with open(local_path, 'rb') as file:
             data = file.read()
         encoded_file = base64.b64encode(data).decode()
 
         api = ce_api.FunctionsApi(self.client)
-        api_utils.api_call(api.create_function_api_v1_functions_post,
-                           Function.creator(name=name,
-                                            function_type=function_type,
-                                            udf_path=udf_name,
-                                            message=message,
-                                            file_contents=encoded_file))
+
+        fn_list = api_utils.api_call(
+            func=api.get_functions_api_v1_functions_get)
+
+        matching_fn_list = [fn for fn in fn_list if fn.name == name]
+        if len(matching_fn_list) == 0:
+            logging.info('No matching functions found! Pushing a new '
+                         'function!')
+
+            func = api_utils.api_call(
+                api.create_function_api_v1_functions_post,
+                Function.creator(name=name,
+                                 function_type=function_type,
+                                 udf_path=udf_name,
+                                 message=message,
+                                 file_contents=encoded_file))
+
+            return FunctionVersion(**func.function_versions[0].to_dict())
+
+        elif len(matching_fn_list) == 1:
+            logging.info('Matching functions found! Pushing a new '
+                         'function version!')
+            func = matching_fn_list[0]
+            return api_utils.api_call(
+                api.create_function_version_api_v1_functions_function_id_versions_post,
+                func.id,
+                FunctionVersion.creator(udf_path=name,
+                                        message=message,
+                                        file_contents=encoded_file))
 
     def pull_function_version(self, function_id, version_id, output_path=None):
-        function_version = self.get_function_version(function_id, version_id)
+        api = ce_api.FunctionsApi(self.client)
+        f = api_utils.api_call(
+            api.get_single_function_api_v1_functions_function_id_get,
+            function_id)
+        f_name = f.name
+
+        function_version = api_utils.api_call(
+            api.get_function_version_api_v1_functions_function_id_versions_version_id_get,
+            function_id,
+            version_id)
+
         if output_path is None:
             output_path = os.path.join(os.getcwd(),
-                                       '{}@{}.py'.format(function_id,
+                                       '{}@{}.py'.format(f_name,
                                                          version_id))
 
         with open(output_path, 'wb') as f:
@@ -597,7 +782,12 @@ class Client:
             raise EnvironmentError('The magic function is only usable in a '
                                    'Jupyter notebook.')
 
-        function_version = self.get_function_version(function_id, version_id)
+        api = ce_api.FunctionsApi(self.client)
+        function_version = api_utils.api_call(
+            api.get_function_version_api_v1_functions_function_id_versions_version_id_get,
+            function_id,
+            version_id)
+
         f = base64.b64decode(function_version.file_contents).decode('utf-8')
         get_ipython().set_next_input(f)
 
@@ -826,3 +1016,13 @@ class Client:
                             'core@maiot.io to get further information.')
 
         logging.info('Model downloaded to: {}'.format(output_path))
+
+# class CLIClient(Client):
+#
+#     def __init__(self, info):
+#         active_user = info[constants.ACTIVE_USER]
+#         config = ce_api.Configuration()
+#         config.host = constants.API_HOST
+#         config.access_token = info[active_user][constants.TOKEN]
+#
+#         self.client = ce_api.ApiClient(config)
