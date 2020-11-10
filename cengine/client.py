@@ -704,32 +704,65 @@ class Client:
                                    function_id: Text,
                                    version_id: Text) -> FunctionVersion:
         return self.get_function_versions(function_id=function_id,
-                                          version_id=version_id)[0]
+                                          id=version_id)[0]
 
     def push_function(self,
                       name: Text,
                       function_type: Text,
                       local_path: Text,
                       udf_name: Text,
-                      message: Text = None):
+                      message: Text = None) -> FunctionVersion:
 
         with open(local_path, 'rb') as file:
             data = file.read()
         encoded_file = base64.b64encode(data).decode()
 
         api = ce_api.FunctionsApi(self.client)
-        api_utils.api_call(api.create_function_api_v1_functions_post,
-                           Function.creator(name=name,
-                                            function_type=function_type,
-                                            udf_path=udf_name,
-                                            message=message,
-                                            file_contents=encoded_file))
+
+        fn_list = api_utils.api_call(
+            func=api.get_functions_api_v1_functions_get)
+
+        matching_fn_list = [fn for fn in fn_list if fn.name == name]
+        if len(matching_fn_list) == 0:
+            logging.info('No matching functions found! Pushing a new '
+                         'function!')
+
+            func = api_utils.api_call(
+                api.create_function_api_v1_functions_post,
+                Function.creator(name=name,
+                                 function_type=function_type,
+                                 udf_path=udf_name,
+                                 message=message,
+                                 file_contents=encoded_file))
+
+            return FunctionVersion(**func.function_versions[0].to_dict())
+
+        elif len(matching_fn_list) == 1:
+            logging.info('Matching functions found! Pushing a new '
+                         'function version!')
+            func = matching_fn_list[0]
+            return api_utils.api_call(
+                api.create_function_version_api_v1_functions_function_id_versions_post,
+                func.id,
+                FunctionVersion.creator(udf_path=name,
+                                        message=message,
+                                        file_contents=encoded_file))
 
     def pull_function_version(self, function_id, version_id, output_path=None):
-        function_version = self.get_function_version(function_id, version_id)
+        api = ce_api.FunctionsApi(self.client)
+        f = api_utils.api_call(
+            api.get_single_function_api_v1_functions_function_id_get,
+            function_id)
+        f_name = f.name
+
+        function_version = api_utils.api_call(
+            api.get_function_version_api_v1_functions_function_id_versions_version_id_get,
+            function_id,
+            version_id)
+
         if output_path is None:
             output_path = os.path.join(os.getcwd(),
-                                       '{}@{}.py'.format(function_id,
+                                       '{}@{}.py'.format(f_name,
                                                          version_id))
 
         with open(output_path, 'wb') as f:
@@ -749,7 +782,12 @@ class Client:
             raise EnvironmentError('The magic function is only usable in a '
                                    'Jupyter notebook.')
 
-        function_version = self.get_function_version(function_id, version_id)
+        api = ce_api.FunctionsApi(self.client)
+        function_version = api_utils.api_call(
+            api.get_function_version_api_v1_functions_function_id_versions_version_id_get,
+            function_id,
+            version_id)
+
         f = base64.b64decode(function_version.file_contents).decode('utf-8')
         get_ipython().set_next_input(f)
 
@@ -979,13 +1017,12 @@ class Client:
 
         logging.info('Model downloaded to: {}'.format(output_path))
 
-
-class CLIClient(Client):
-
-    def __init__(self, info):
-        active_user = info[constants.ACTIVE_USER]
-        config = ce_api.Configuration()
-        config.host = constants.API_HOST
-        config.access_token = info[active_user][constants.TOKEN]
-
-        self.client = ce_api.ApiClient(config)
+# class CLIClient(Client):
+#
+#     def __init__(self, info):
+#         active_user = info[constants.ACTIVE_USER]
+#         config = ce_api.Configuration()
+#         config.host = constants.API_HOST
+#         config.access_token = info[active_user][constants.TOKEN]
+#
+#         self.client = ce_api.ApiClient(config)
